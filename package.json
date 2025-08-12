@@ -28,10 +28,8 @@
   "author": "troyeguo <13820674+troyeguo@users.noreply.github.com> (https://github.com/troyeguo)",
   "license": "MIT",
   "homepage": "https://github.com/troyeguo/react-native-kookit#readme",
-  "dependencies": {},
   "devDependencies": {
     "@types/react": "~19.0.0",
-    "expo-module-scripts": "^4.1.10",
     "expo": "~53.0.0",
     "react-native": "0.79.1"
   },
