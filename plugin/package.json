@@ -1,0 +1,16 @@
+{
+  "name": "react-native-kookit-plugin",
+  "version": "1.0.0",
+  "main": "build/withVolumeKeyIntercept.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf build"
+  },
+  "dependencies": {
+    "@expo/config-plugins": "^8.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}

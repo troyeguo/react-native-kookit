@@ -1,17 +1,16 @@
 {
   "name": "react-native-kookit",
-  "version": "0.1.3",
+  "version": "0.1.2",
   "description": "React Native module for intercepting volume button presses on iOS and Android",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
     "build": "expo-module build",
-    "build-plugin": "cd plugin && npm install && npm run build",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
     "prepare": "expo-module prepare",
-    "prepublishOnly": "expo-module prepublishOnly && npm run build-plugin",
+    "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android"
@@ -46,9 +45,7 @@
   },
   "expo": {
     "android": {
-      "configPlugins": [
-        "./app.plugin.js"
-      ]
+      "configPlugins": ["./plugin/build/withVolumeKeyIntercept.js"]
     }
   }
 }
