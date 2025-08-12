@@ -2,6 +2,7 @@ package expo.modules.kookit.example
 
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -9,8 +10,12 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnable
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
 import expo.modules.ReactActivityDelegateWrapper
+import expo.modules.kookit.VolumeKeyInterceptActivity
+import expo.modules.kookit.handleVolumeKeyEvent
 
-class MainActivity : ReactActivity() {
+class MainActivity : ReactActivity(), VolumeKeyInterceptActivity {
+  private var volumeKeyListener: ((Int) -> Unit)? = null
+  private var isVolumeKeyInterceptEnabled = false
   override fun onCreate(savedInstanceState: Bundle?) {
     // Set the theme to AppTheme BEFORE onCreate to support
     // coloring the background, status bar, and navigation bar.
@@ -54,8 +59,24 @@ class MainActivity : ReactActivity() {
           return
       }
 
-      // Use the default back button implementation on Android S
-      // because it's doing more than [Activity.moveTaskToBack] in fact.
+            // Use the default back button implementation on Android S
+      // because it's more predictable.
       super.invokeDefaultOnBackPressed()
+  }
+
+  // Volume key interception implementation
+  override fun setVolumeKeyListener(listener: ((Int) -> Unit)?) {
+    volumeKeyListener = listener
+  }
+  
+  override fun setVolumeKeyInterceptEnabled(enabled: Boolean) {
+    isVolumeKeyInterceptEnabled = enabled
+  }
+
+  override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+    if (isVolumeKeyInterceptEnabled && handleVolumeKeyEvent(event)) {
+      return true
+    }
+    return super.dispatchKeyEvent(event)
   }
 }
