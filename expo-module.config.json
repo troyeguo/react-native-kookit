@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["ReactNativeKookitModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.kookit.ReactNativeKookitModule"]
+  }
+}
