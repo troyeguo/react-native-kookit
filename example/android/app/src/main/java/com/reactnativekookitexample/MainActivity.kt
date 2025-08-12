@@ -1,19 +1,29 @@
-// This is an example MainActivity implementation
-// Copy this code to your app's MainActivity.kt file
+package com.reactnativekookitexample
 
-package YOUR_PACKAGE_NAME // Replace with your actual package name
+import android.os.Build
+import android.os.Bundle
+import android.view.KeyEvent
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
+
+import expo.modules.ReactActivityDelegateWrapper
 import expo.modules.kookit.VolumeKeyInterceptActivity
 import expo.modules.kookit.handleVolumeKeyEvent
-import android.view.KeyEvent
 
 class MainActivity : ReactActivity(), VolumeKeyInterceptActivity {
     private var volumeKeyListener: ((Int) -> Unit)? = null
     private var isVolumeKeyInterceptEnabled = false
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // Set the theme to AppTheme BEFORE onCreate to support
+        // coloring the background, status bar, and navigation bar.
+        // This is required for expo-splash-screen.
+        setTheme(R.style.AppTheme);
+        super.onCreate(null)
+    }
 
     /**
      * Returns the name of the main component registered from JavaScript. This is used to schedule
@@ -25,8 +35,35 @@ class MainActivity : ReactActivity(), VolumeKeyInterceptActivity {
      * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]
      * which allows you to enable New Architecture with a single boolean flags [fabricEnabled]
      */
-    override fun createReactActivityDelegate(): ReactActivityDelegate =
-        DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+    override fun createReactActivityDelegate(): ReactActivityDelegate {
+        return ReactActivityDelegateWrapper(
+              this,
+              BuildConfig.IS_NEW_ARCHITECTURE_ENABLED,
+              object : DefaultReactActivityDelegate(
+                  this,
+                  mainComponentName,
+                  fabricEnabled
+              ){})
+    }
+
+    /**
+      * Align the back button behavior with Android S
+      * where moving root activities to background instead of finishing activities.
+      * @see <a href="https://developer.android.com/reference/android/app/Activity#onBackPressed()">onBackPressed</a>
+      */
+    override fun invokeDefaultOnBackPressed() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+            if (!moveTaskToBack(false)) {
+                // For non-root activities, use the default implementation to finish them.
+                super.invokeDefaultOnBackPressed()
+            }
+            return
+        }
+
+        // Use the default back button implementation on Android S
+        // because it's more predictable.
+        super.invokeDefaultOnBackPressed()
+    }
 
     // Volume key interception implementation
     override fun setVolumeKeyListener(listener: ((Int) -> Unit)?) {
@@ -37,8 +74,8 @@ class MainActivity : ReactActivity(), VolumeKeyInterceptActivity {
         isVolumeKeyInterceptEnabled = enabled
     }
 
-    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-        if (event != null && isVolumeKeyInterceptEnabled && handleVolumeKeyEvent(event)) {
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (isVolumeKeyInterceptEnabled && handleVolumeKeyEvent(event)) {
             return true
         }
         return super.dispatchKeyEvent(event)
