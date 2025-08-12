@@ -81,6 +81,14 @@ class ReactNativeKookitModule : Module() {
       // Install key event interceptor at the application level
       val activity = appContext.currentActivity
       activity?.let { act ->
+        if (act !is VolumeKeyInterceptActivity) {
+          // Throw an error with helpful message
+          throw IllegalStateException(
+            "Your MainActivity must implement VolumeKeyInterceptActivity interface and override dispatchKeyEvent method. " +
+            "Please see the documentation at https://github.com/troyeguo/react-native-kookit for setup instructions."
+          )
+        }
+        
         VolumeKeyInterceptor.install(act) { keyCode ->
           val keyType = when (keyCode) {
             KeyEvent.KEYCODE_VOLUME_UP -> "up"
@@ -89,10 +97,13 @@ class ReactNativeKookitModule : Module() {
           }
           sendEvent("onVolumeButtonPressed", mapOf("key" to keyType))
         }
+      } ?: run {
+        throw IllegalStateException("No current activity found. Make sure to call enableVolumeKeyInterception when your app is in foreground.")
       }
       
     } catch (e: Exception) {
-      throw Exceptions.ReactContextLost()
+      // Re-throw the exception so JavaScript can see the error
+      throw e
     }
   }
 
