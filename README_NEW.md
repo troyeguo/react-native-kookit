@@ -112,6 +112,16 @@ export default function App() {
 
 A: 插件需要修改原生 Android 代码，prebuild 会应用所有插件修改。
 
+### Q: 遇到 "Plugin is an unexpected type: undefined" 错误怎么办？
+
+A:
+
+1. 确保已正确安装：`npm install react-native-kookit`
+2. 清理重装：`rm -rf node_modules && npm install`
+3. 重新预构建：`npx expo prebuild --clean`
+
+详细故障排除请查看 [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
+
 ### Q: 音量键无响应怎么办？
 
 A:
