@@ -27,6 +27,14 @@ module.exports = {
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      [
+        "expo-dev-client",
+        {
+          "launchMode": "most-recent"
+        }
+      ]
+    ],
     "extra": {
       "router": {
         "origin": false
