@@ -1,17 +1,18 @@
 {
   "name": "react-native-kookit",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "React Native module for intercepting volume button presses on iOS and Android",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
     "build": "expo-module build",
     "build-plugin": "cd plugin && npm install && npm run build",
+    "clean-plugin-deps": "rm -rf plugin/node_modules plugin/package-lock.json",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
     "prepare": "expo-module prepare",
-    "prepublishOnly": "expo-module prepublishOnly && npm run build-plugin",
+    "prepublishOnly": "expo-module prepublishOnly && npm run build-plugin && npm run clean-plugin-deps",
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
@@ -34,19 +35,28 @@
   "author": "troyeguo <13820674+troyeguo@users.noreply.github.com> (https://github.com/troyeguo)",
   "license": "MIT",
   "homepage": "https://github.com/troyeguo/react-native-kookit#readme",
-  "dependencies": {
-    "@expo/config-plugins": "^8.0.0",
-    "expo": "~53.0.20",
-    "react": "19.0.0",
-    "react-native": "0.79.5"
-  },
+  "files": [
+    "build",
+    "android/src",
+    "android/build.gradle",
+    "ios",
+    "app.plugin.js",
+    "expo-module.config.json",
+    "plugin/build",
+    "plugin/package.json",
+    "*.md"
+  ],
+  "dependencies": {},
   "devDependencies": {
+    "@expo/config-plugins": "^8.0.0",
     "@types/react": "~19.0.0",
     "expo-module-scripts": "^4.1.10",
     "expo": "~53.0.0",
+    "react": "19.0.0",
     "react-native": "0.79.1"
   },
   "peerDependencies": {
+    "@expo/config-plugins": "*",
     "expo": "*",
     "react": "*",
     "react-native": "*"
